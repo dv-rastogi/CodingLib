@@ -23,13 +23,23 @@ inline void setPrecision(int n){cout.precision(n);}
 ll INF = 1e10;
 ll MOD = 1e9+7;
 
+vector<int> sieve(int n) {
+	vector<int> prime(n + 1, 1); // stores the greatest factor
+	for (int p = 2; p * p <= n; ++ p) {
+		if (prime[p] == 1) {
+			for (int i = p * p; i <= n; i += p) {
+				prime[i] = p;
+			}
+		}
+	}
+	return prime;
+}
+
 int main() {
     #ifndef ONLINE_JUDGE
         freopen("debug.txt", "w", stderr);
     #endif
     SEND_HELP();
-    
-    int x = 4;
     
     return 0;
 }

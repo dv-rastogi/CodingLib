@@ -1,3 +1,5 @@
+<snippet>
+	<content><![CDATA[
 # include "bits/stdc++.h"
  
 using namespace std;
@@ -42,30 +44,12 @@ int main() {
     #endif
     SEND_HELP
     
-    int tt;
-    cin >> tt;
-    while (tt --) {
-        string s;
-        int n, q;
-        cin >> n >> q;
-        cin >> s;
-        while (q --) {
-            int l, r;
-            cin >> l >> r;
-            --l; --r;
-            string t = s.substr(l, r - l + 1);
-            char nl = t[0];
-            char nr = t[t.size() - 1];
-            bool ok = 0;
-            for (int i = 0; i < l; ++ i) 
-                if (nl == s[i]) ok = 1;
-            for (int i = r + 1; i < n; ++ i)
-                if (nr == s[i]) ok = 1;
-            if (t.size() >= 2 && ok) puts("YES");
-            else puts("NO");
-        }
-    }
-    
+    $1
     
     return 0;
 }
+
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>TEMP</tabTrigger>
+</snippet>

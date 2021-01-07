@@ -42,30 +42,26 @@ int main() {
     #endif
     SEND_HELP
     
-    int tt;
-    cin >> tt;
-    while (tt --) {
-        string s;
-        int n, q;
-        cin >> n >> q;
-        cin >> s;
-        while (q --) {
-            int l, r;
-            cin >> l >> r;
-            --l; --r;
-            string t = s.substr(l, r - l + 1);
-            char nl = t[0];
-            char nr = t[t.size() - 1];
-            bool ok = 0;
-            for (int i = 0; i < l; ++ i) 
-                if (nl == s[i]) ok = 1;
-            for (int i = r + 1; i < n; ++ i)
-                if (nr == s[i]) ok = 1;
-            if (t.size() >= 2 && ok) puts("YES");
-            else puts("NO");
-        }
-    }
-    
+   	int n, m;
+   	cin >> n >> m;
+
+   	multiset<int> h;
+   	for (int i = 0, x; i < n; ++ i) {
+   		cin >> x;
+   		h.insert(x);
+   	}
+
+   	for (int i = 0, c; i < m; ++ i) {
+   		cin >> c;
+   		auto pos = h.upper_bound(c);
+   		if (pos == h.begin()) cout << -1 << " ";
+   		else {
+   			-- pos;
+   			cout << *pos << " ";
+   			h.erase(pos);
+   		}
+   		cout << endl;
+   	}
     
     return 0;
 }

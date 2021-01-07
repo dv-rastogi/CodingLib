@@ -1,0 +1,87 @@
+<snippet>
+	<content><![CDATA[
+
+struct segTree { // sum of range
+	vector<ll> t, lazy;
+	vector<ll> a;
+	int n;
+	void init(vector<ll> A) { // init the segTree
+		n = A.size();
+		t.resize(4 * n);
+		lazy.resize(4 * n);
+		for (auto it : A)
+			a.push_back(it);
+
+		this->build(0, 0, n - 1);
+	}
+	void build(int u, int tl, int tr) { // build
+		if (tl == tr) {
+			t[u] = a[tl];
+		}
+		else {
+			int tm = (tl + tr) >> 1;
+			build(2 * u + 1, tl, tm);
+			build(2 * u + 2, tm + 1, tr);
+			t[u] = t[2 * u + 1] + t[2 * u + 2];
+		}
+	}
+	void update(int u, int tl, int tr, int l, int r, ll val) { // update
+		if (l == tl && tr == r) {
+			t[u] += val * (r - l + 1);
+			{ // lazy
+				lazy[u] += val;
+			}
+		}
+		else {
+			int tm = (tl + tr) >> 1;
+			{ // perform lazy push
+				lazy[2 * u + 1] += lazy[u];
+				t[2 * u + 1] += (lazy[u] * (tm - tl + 1));
+				lazy[2 * u + 2] += lazy[u];
+				t[2 * u + 2] += (lazy[u] * (tr - tm));
+				lazy[u] = 0;
+			}
+			if (r <= tm)
+				update(2 * u + 1, tl, tm, l, r, val);
+			else if (l > tm)
+				update(2 * u + 2, tm + 1, tr, l, r, val);
+			else {
+				update(2 * u + 1, tl, tm, l, tm, val);
+				update(2 * u + 2, tm + 1, tr, tm + 1, r, val);
+			}
+			t[u] = t[2 * u + 1] + t[2 * u + 2];
+		}
+	}
+	ll query(int u, int tl, int tr, int l, int r) { // update
+		if (l == tl && tr == r) {
+			return t[u];
+		}
+		else {
+			int tm = (tl + tr) >> 1;
+			{ // perform lazy push
+				lazy[2 * u + 1] += lazy[u];
+				t[2 * u + 1] += (lazy[u] * (tm - tl + 1));
+				lazy[2 * u + 2] += lazy[u];
+				t[2 * u + 2] += (lazy[u] * (tr - tm));
+				lazy[u] = 0;
+			}
+			if (r <= tm)
+				return query(2 * u + 1, tl, tm, l, r);
+			else if (l > tm)
+				return query(2 * u + 2, tm + 1, tr, l, r);
+			else {
+				ll lsum = query(2 * u + 1, tl, tm, l, tm);
+				ll rsum = query(2 * u + 2, tm + 1, tr, tm + 1, r);
+				return lsum + rsum;
+			} 
+		}
+	}
+}; $1
+
+
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>segTreeLazyTEMP</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

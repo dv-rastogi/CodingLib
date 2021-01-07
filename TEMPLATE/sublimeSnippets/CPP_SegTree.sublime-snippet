@@ -1,0 +1,47 @@
+<snippet>
+	<content><![CDATA[
+struct segTree {
+	vector<ll> t, a;
+	int n;
+	void init(vector<ll> A) {
+		n = A.size();
+		t.resize(4 * n);
+		for (auto it : A) 
+			a.push_back(it);
+		build(0, 0, n - 1);		
+	}
+	void build(int u, int tl, int tr) {
+	    if(tl == tr){
+	        t[u] = a[tl];
+	        return;
+	    }
+	    int tm = (tl + tr) >> 1;
+	    build(2 * u + 1, tl, tm);
+	    build(2 * u + 2, tm + 1, tr);
+	    t[u] = min(t[2 * u + 1], t[2 * u + 2]);
+	}
+	void update(int u, int tl, int tr, int idx) { // update first the segArray
+	    if(tl == tr){
+	        t[u] = a[idx];
+	        return;
+	    }
+	    int tm = (tl + tr) >> 1;
+	    if(idx <= tm) update(2 * u + 1, tl, tm, idx);
+	    else update(2 * u + 2, tm + 1, tr, idx);
+	    t[u] = min(t[2 * u + 1], t[2 * u + 2]);
+	}
+	ll query(int u, int tl, int tr, int l, int r) {
+	    if(tl == l && tr == r)
+	        return t[u];
+	    int tm = (tl + tr) >> 1;
+	    if(r <= tm) return query(2 * u + 1, tl, tm, l, r);
+	    else if(l > tm) return query(2 * u + 2, tm + 1, tr, l, r);
+	    else return min(query(2 * u + 1, tl, tm, l, tm), query(2 *u + 2, tm + 1, tr, tm + 1, r));
+	}
+}; $1
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>segTreeTEMP</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>
