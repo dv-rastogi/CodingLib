@@ -19,9 +19,9 @@ void __print(const string& x) { cerr << '\"' << x << '\"'; }
 void __print(bool x) { cerr << (x ? "true" : "false"); }
  
 template<typename T, typename V>
-void __print(const pair<T, V>& x) { cerr << '{'; __print(x.first); cerr << ", "; __print(x.second); cerr << '}'; }
+void __print(const pair<T, V>& x) { cerr << '{'; __print(x.first); cerr << ','; __print(x.second); cerr << '}'; }
 template<typename T>
-void __print(const T& x) { int _ = 0; cerr << '{'; for (auto& i : x) cerr << (_++ ? ", " : ""), __print(i); cerr << "}"; }
+void __print(const T& x) { int _ = 0; cerr << '{'; for (auto& i : x) cerr << (_++ ? "," : ""), __print(i); cerr << "}"; }
 void _print() { cerr << "]\n"; }
 template <typename T, typename... V>
 void _print(T t, V... v) { __print(t); if (sizeof...(v)) cerr << ", "; _print(v...); }
@@ -36,47 +36,35 @@ void _print(T t, V... v) { __print(t); if (sizeof...(v)) cerr << ", "; _print(v.
 ll INF = 2e17;
 ll MOD = 1e9+7;
 
-int n, m;
-vector<int> x;
-vector<vector<ll>> dp;
-
-ll calc(int pos, int prev) {
-    if (prev <= 0 || prev > m) return 0;
-    if (pos == n) return 1;
-    if (x[pos] != 0 && abs(x[pos] - prev) > 1) return 0;
-    
-    ll &ans = dp[pos][prev];
-    if (ans != -1) {
-        return ans;
-    } 
-    if (x[pos] != 0) {
-        ans = calc(pos + 1, x[pos]);
-    } else {
-        ans = calc(pos + 1, prev - 1) + calc(pos + 1, prev) + calc(pos + 1, prev + 1);
-    }
-    return ans;
-}
-
 int main() {
     #ifndef ONLINE_JUDGE
-        freopen("inputf.in", "r", stdin);
         freopen("debug.txt", "w", stderr);
-    #endif  
+    #endif
     SEND_HELP
     
-    cin >> n >> m;
-    dp.resize(n, vector<ll>(m + 1, -1));
-    x.resize(n);
+    int n;
+    cin >> n;
+    vector<int> x(n);
     for (int i = 0; i < n; ++ i) cin >> x[i];
+    sort(x.begin(), x.end());
 
-    ll ans = 0;
-    if (x[0] == 0) {
-        for (int j = 1; j <= m; ++ j)
-            ans += calc(1, j);
-    } else {
-        ans = calc(1, x[0]);
+    if (x[0] != 1) {
+        cout << 1 << endl;
+        return 0;
+    }
+    
+    vector<ll> pre{x[0]};
+    for (int i = 1; i < n; ++ i) {
+        pre.push_back(pre.back() + x[i]);
     }
 
-    cout << ans;
+    for (int i = 0; i < n - 1; ++ i) {
+        if (pre[i] + 1 < x[i + 1]) {
+            cout << pre[i] + 1 << endl;
+            return 0;
+        }
+    }    
+  
+    cout << pre[n - 1] + 1 << endl;
     return 0;
 }
