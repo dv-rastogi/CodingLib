@@ -38,6 +38,9 @@ ll MOD = 1e9 + 7;
 inline ll gcd(ll a, ll b) {
     return (b == 0) ? a : gcd(b, a % b);
 }
+inline ll lcm(ll a, ll b) {
+    return a * b / gcd(a, b);
+}
 // BINARY EXP
 ll expM(ll x, ll y, ll p) {
     ll res = 1;
