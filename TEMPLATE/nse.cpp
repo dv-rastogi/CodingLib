@@ -1,5 +1,3 @@
-<snippet>
-	<content><![CDATA[
 # include "bits/stdc++.h"
  
 using namespace std;
@@ -32,24 +30,43 @@ void _print(T t, V... v) { __print(t); if (sizeof...(v)) cerr << ", "; _print(v.
 #else
     #define dbg(x...)
 #endif
-
-// DON"T GET IMPULSIVEEEEEEE aaaaaaahh
  
 ll INF = 2e17;
-ll MOD = 1e9+7;
+ll MOD = 1e9 + 7;
 
-int main() {
+vector<int> nse(vector<int> a, int n) { // next smaller element
+    vector<int> pos(n, n);
+    vector<pair<int, int>> h(n);
+    for (int i = 0; i < n; ++ i) {
+        h[i] = {a[i], i};
+    }
+ 
+    list<pair<int, int>> s;
+    s.push_back(h[0]);
+    for (int i = 1; i < n; ++ i) {
+ 
+        while (!s.empty() && s.back().f > h[i].f) {
+            pos[s.back().s] = i;
+            s.pop_back();
+        }
+ 
+        s.push_back(h[i]);
+    }
+ 
+    return pos;
+}
+
+int main() { 
     #ifndef ONLINE_JUDGE
-        freopen("debug.txt", "w", stderr);
+        freopen("inputf.in", "r", stdin); // LINUX
     #endif
     SEND_HELP
+
     
-    $1
     
     return 0;
 }
 
-]]></content>
-	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
-	<tabTrigger>TEMP</tabTrigger>
-</snippet>
+/*
+https://github.com/watch24hrs-iiitd/CodingLib
+*/

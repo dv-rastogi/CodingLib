@@ -59,8 +59,8 @@ ll calc(int pos, int prev) {
 
 int main() {
     #ifndef ONLINE_JUDGE
-        freopen("inputf.in", "r", stdin);
-        freopen("debug.txt", "w", stderr);
+        // freopen("inputf.in", "r", stdin); // LINUX
+        freopen("debug.txt", "w", stderr); // WINDOWS
     #endif  
     SEND_HELP
     

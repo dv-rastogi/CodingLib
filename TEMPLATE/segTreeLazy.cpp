@@ -34,7 +34,7 @@ void _print(T t, V... v) { __print(t); if (sizeof...(v)) cerr << ", "; _print(v.
 // DON"T GET IMPULSIVEEEEEEE aaaaaaahh
  
 ll INF = 2e17;
-ll MOD = 1e9+7;
+ll MOD = 1e9 + 7;
 
 struct segTree { // sum of range
 	vector<ll> t, lazy;
@@ -116,7 +116,7 @@ struct segTree { // sum of range
 
 int main() {
     #ifndef ONLINE_JUDGE
-        freopen("debug.txt", "w", stderr);
+        freopen("debug.txt", "w", stderr); // WINDOWS
     #endif
     SEND_HELP
     
@@ -158,3 +158,7 @@ int main() {
     }
     return 0;
 }
+
+/*
+https://github.com/watch24hrs-iiitd/CodingLib
+*/
