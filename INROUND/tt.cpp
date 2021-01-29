@@ -34,38 +34,20 @@ void _print(T t, V... v) { __print(t); if (sizeof...(v)) cerr << ", "; _print(v.
 // DON"T GET IMPULSIVEEEEEEE aaaaaaahh
  
 ll INF = 2e17;
-ll MOD = 1e9+7;
+ll MOD = 1e9 + 7;
 
 int main() {
     #ifndef ONLINE_JUDGE
-        freopen("debug.txt", "w", stderr);
+        freopen("debug.txt", "w", stderr); // WINDOWS
+        // freopen("inputf.in", "r", stdin); // LINUX
     #endif
     SEND_HELP
     
-    int tt;
-    cin >> tt;
-    while (tt --) {
-        string s;
-        int n, q;
-        cin >> n >> q;
-        cin >> s;
-        while (q --) {
-            int l, r;
-            cin >> l >> r;
-            --l; --r;
-            string t = s.substr(l, r - l + 1);
-            char nl = t[0];
-            char nr = t[t.size() - 1];
-            bool ok = 0;
-            for (int i = 0; i < l; ++ i) 
-                if (nl == s[i]) ok = 1;
-            for (int i = r + 1; i < n; ++ i)
-                if (nr == s[i]) ok = 1;
-            if (t.size() >= 2 && ok) puts("YES");
-            else puts("NO");
-        }
-    }
     
     
     return 0;
 }
+
+/*
+https://github.com/watch24hrs-iiitd/CodingLib
+*/
