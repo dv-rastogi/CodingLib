@@ -34,7 +34,7 @@ void _print(T t, V... v) { __print(t); if (sizeof...(v)) cerr << ", "; _print(v.
 ll INF = 2e17;
 ll MOD = 1e9 + 7;
 
-struct dsu {
+struct DSU {
     vector<int> par, sz;
     int n; 
     void init(int lim) {
@@ -61,9 +61,6 @@ struct dsu {
         sz[a] += sz[b];
     }
 };
-
-
-int n, m;
 
 int main() { 
     #ifndef ONLINE_JUDGE

@@ -36,7 +36,7 @@ void _print(T t, V... v) { __print(t); if (sizeof...(v)) cerr << ", "; _print(v.
 ll INF = 2e17;
 ll MOD = 1e9 + 7;
 
-struct segTree {
+struct SEGTREE {
 	vector<ll> t, a;
 	int n;
 	void init(vector<ll> A) {
@@ -86,7 +86,7 @@ int main() {
     cin >> n >> q;
     vector<ll> A(n);
     for (int i = 0; i < n; ++ i) cin >> A[i];
-    segTree seg;
+    struct SEGTREE seg;
 	seg.init(A);
 
 	while(q --) {
