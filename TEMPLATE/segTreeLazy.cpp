@@ -36,7 +36,7 @@ void _print(T t, V... v) { __print(t); if (sizeof...(v)) cerr << ", "; _print(v.
 ll INF = 2e17;
 ll MOD = 1e9 + 7;
 
-struct segTree { // sum of range
+struct SEGTREE_LAZY { // sum of range
 	vector<ll> t, lazy;
 	vector<ll> a;
 	int n;
@@ -120,42 +120,7 @@ int main() {
     #endif
     SEND_HELP
     
-    int tt;
-    cin >> tt;
-    while(tt --) {
-    	segTree seg;
-    	int n;
-    	cin >> n;
-    	vector<ll> A(n, 0);
-    	seg.init(A);
-    	int q;
-    	cin >> q;
-    	while (q --) {
-    		int cho;
-    		cin >> cho;
-    		if (cho) {
-    			int l, r;
-    			cin >> l >> r;
-    			-- l; -- r;
-    			if (l > r)
-    				swap(l, r);
-    			// dbg(cho, l, r);
-    			r = min(r, n - 1);
-    			cout << seg.query(0, 0, n - 1, l, r) << endl;
-    		}
-    		else {
-    			int l, r;
-    			ll val;
-    			cin >> l >> r >> val;
-    			-- l; -- r;
-    			if (l > r)
-    				swap(l, r);
-    			// dbg(cho, l, r, val);
-    			r = min(r, n - 1);
-    			seg.update(0, 0, n - 1, l, r, val);
-    		}
-    	}
-    }
+    
     return 0;
 }
 
