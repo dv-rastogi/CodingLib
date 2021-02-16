@@ -1,3 +1,4 @@
 *.exe
 INROUND/
 .vscode/
+INROUND/*
