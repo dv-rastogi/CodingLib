@@ -35,10 +35,11 @@ ll INF = 2e17;
 ll MOD = 1e9 + 7;
 
 vector<int> sieve(int n) {
-	vector<int> prime(n + 1, 1); // stores the greatest factor, bounce down while factoring
+	vector<int> prime(n + 1, 1); // stores the smallest factor, bounce down while factoring
 	for (int p = 2; p * p <= n; ++ p) {
 		if (prime[p] == 1) {
 			for (int i = p * p; i <= n; i += p) {
+				if (prime[i] != 1) continue;
 				prime[i] = p;
 			}
 		}
