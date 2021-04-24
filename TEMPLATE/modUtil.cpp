@@ -63,6 +63,14 @@ inline ll iM(ll x, ll p) { // p is prime
 inline ll dM(ll a, ll b, ll p) {
     return ((a * iM(b, p)) % p);
 }
+// MOD MUL
+inline ll mM(ll a, ll b, ll p) {
+    if (a >= p) a %= p;
+    if (b >= p) b %= p;
+    ll m = a * b;
+    if (m >= p) m %= p;
+    return m;
+}
 // FACTORIAL
 vector<ll> fact;
 inline void formFactM(int N, ll p) {
