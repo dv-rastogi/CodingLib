@@ -34,6 +34,7 @@ void _print(T t, V... v) { __print(t); if (sizeof...(v)) cerr << ", "; _print(v.
 ll INF = 2e17;
 ll MOD = 1e9 + 7;
 
+
 struct BLIFT_TREE {
     vector<vector<pair<int, ll>>> adj; // Adjacency list #INPUT 0-indexed
     int n; // No. of nodes #INPUT
@@ -46,26 +47,15 @@ struct BLIFT_TREE {
     int dfsTime;
     vector<int> inTime, outTime;
 
-    void init(vector<vector<int>> &ADJ, int N, int ROOT = 0) {
+    void init(int N, int ROOT = 0) {
         n = N;
         root = ROOT;
-        adj.resize(N);
-
-        for (int i = 0; i < n; ++ i) {
-            for (auto it : ADJ[i]) {
-                adj[i].push_back({it, 1});
-            }
-        }
-
-        formUP();
+        adj.resize(n);
     }
 
-    void initD(vector<vector<pair<int, ll>>> &ADJ, int N, int ROOT = 0) { // FOR DEPTH
-        n = N;
-        root = ROOT;
-        adj = ADJ;
-
-        formUP();
+    void addEdge(int a, int b, bool bi = true, ll w = 1) {
+        adj[a].push_back({b, w});
+        if (bi) adj[b].push_back({a, w});
     }
 
     void dfsDep(int u, int p) {
@@ -108,7 +98,7 @@ struct BLIFT_TREE {
     int moveUP(int u, int k) { // take K steps above u
         int cur = u;
         if (k > d[u])
-            return -1;
+            return root;
         if (k == 0)
             return cur;
         int left = k;
@@ -150,35 +140,67 @@ struct BLIFT_TREE {
 };
 
 
+int n, m;
+struct BLIFT_TREE tree;
+vector<pair<int, int>> paths;
+vector<int> weight;
+vector<int> ans;
+
+void dfs(int u, int p = -1) {
+    ans[u] = weight[u];
+    for (auto v: tree.adj[u]) {
+        if (v.f != p) {
+            dfs(v.f, u);
+            ans[u] += ans[v.f];
+        }
+    }
+}
+
 int main() { 
     #ifndef ONLINE_JUDGE
         freopen("inputf.in", "r", stdin); // LINUX
     #endif
     SEND_HELP
 
-    int n, q;
-    cin >> n >> q;
+    int n, m;
+    cin >> n >> m;
 
-    vector<vector<int>> adj(n);
-    for (int i = 1; i < n; ++ i) {
-        int e;
-        cin >> e;
-        -- e;
-        adj[e].push_back(i);
-    }
-
-    struct BLIFT_TREE tree;
-    tree.init(adj, n);
-
-    while (q --) {
+    tree.init(n, 0);
+    for (int i = 0; i < n - 1; ++ i) {
         int x, y;
         cin >> x >> y;
-        -- x, --y;
-        int ans = tree.LCA(x, y) + 1;
-        cout << ans << endl;
+        -- x, -- y;
+        tree.addEdge(x, y, true);
     }
 
+    tree.formUP();
+    weight.resize(n);
+    ans.resize(n);
+
+    while (m --) {
+        int u, v;
+        cin >> u >> v;
+
+        -- u, -- v;
+
+        weight[u] += 1;
+        weight[v] += 1;
+
+        auto lca = tree.LCA(u, v);
+        // dbg(u + 1, v + 1, lca + 1);
+        weight[lca] -= 1;
+        if (tree.up[lca][0] != -1)
+            weight[tree.up[lca][0]] -= 1;
+
+        // dbg(weight);
+    }
+
+    dfs(0);
     
+    for (auto it : ans) {
+        cout << it << ' ';
+    }
+
     return 0;
 }
 
