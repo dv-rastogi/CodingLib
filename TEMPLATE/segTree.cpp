@@ -30,82 +30,128 @@ void _print(T t, V... v) { __print(t); if (sizeof...(v)) cerr << ", "; _print(v.
 #else
     #define dbg(x...)
 #endif
-
-// DON"T GET IMPULSIVEEEEEEE aaaaaaahh
  
 ll INF = 2e17;
 ll MOD = 1e9 + 7;
 
+template <typename T>
 struct SEGTREE {
-	vector<ll> t, a;
-	int n;
-	void init(vector<ll> A) {
-		n = A.size();
-		t.resize(4 * n);
-		for (auto it : A) 
-			a.push_back(it);
-		build(0, 0, n - 1);		
-	}
-	void build(int u, int tl, int tr) {
-	    if(tl == tr){
-	        t[u] = a[tl];
-	        return;
-	    }
-	    int tm = (tl + tr) >> 1;
-	    build(2 * u + 1, tl, tm);
-	    build(2 * u + 2, tm + 1, tr);
-	    t[u] = min(t[2 * u + 1], t[2 * u + 2]);
-	}
-	void update(int u, int tl, int tr, int idx) { // update first the segArray
-	    if(tl == tr){
-	        t[u] = a[idx];
-	        return;
-	    }
-	    int tm = (tl + tr) >> 1;
-	    if(idx <= tm) update(2 * u + 1, tl, tm, idx);
-	    else update(2 * u + 2, tm + 1, tr, idx);
-	    t[u] = min(t[2 * u + 1], t[2 * u + 2]);
-	}
-	ll query(int u, int tl, int tr, int l, int r) {
-	    if(tl == l && tr == r)
-	        return t[u];
-	    int tm = (tl + tr) >> 1;
-	    if(r <= tm) return query(2 * u + 1, tl, tm, l, r);
-	    else if(l > tm) return query(2 * u + 2, tm + 1, tr, l, r);
-	    else return min(query(2 * u + 1, tl, tm, l, tm), query(2 *u + 2, tm + 1, tr, tm + 1, r));
-	}
+
+    struct NODE { // CHANGE
+        T x;
+    };  
+
+    NODE merge(const NODE &A,const NODE &B) { // CHANGE
+        return NODE{A.x + B.x};
+    }
+
+    vector<NODE> t, a;
+    int n;
+    
+    void init(vector<T> A) { // initialize on vector
+        n = A.size();
+        t.resize(4 * n);
+        for (auto it : A) 
+            a.push_back(NODE{it});
+        build(0, 0, n - 1);     
+    }
+
+    void build(int u, int tl, int tr) {
+        if(tl == tr){
+            t[u] = a[tl];
+            return;
+        }
+        int tm = (tl + tr) >> 1;
+        build(2 * u + 1, tl, tm);
+        build(2 * u + 2, tm + 1, tr);
+        t[u] = merge(t[2 * u + 1], t[2 * u + 2]);
+    }
+
+    void update(int idx, T val) { // CHANGE
+        a[idx].x = val;
+        _update(0, 0, n - 1, idx);
+    }
+
+    void _update(int u, int tl, int tr, int idx) {
+        if(tl == tr){
+            t[u] = a[idx];
+            return;
+        }
+        int tm = (tl + tr) >> 1;
+        if(idx <= tm) _update(2 * u + 1, tl, tm, idx);
+        else _update(2 * u + 2, tm + 1, tr, idx);
+        t[u] = merge(t[2 * u + 1], t[2 * u + 2]);
+    }
+
+    NODE query(int u, int tl, int tr, int l, int r) {
+        if(tl == l && tr == r)
+            return t[u];
+        int tm = (tl + tr) >> 1;
+        if(r <= tm) return query(2 * u + 1, tl, tm, l, r);
+        else if(l > tm) return query(2 * u + 2, tm + 1, tr, l, r);
+        else return merge(query(2 * u + 1, tl, tm, l, tm), query(2 *u + 2, tm + 1, tr, tm + 1, r));
+    }
 };
 
-int main() {
+const int N = 2e5 + 5;
+vector<ll> t(2 * N);
+vector<int> adj[N];
+int val[N];
+int tim = 0;
+int in[N];
+int out[N];
+
+void dfs(int u, int p) {
+    t[in[u] = tim ++] = val[u];
+    for (auto v : adj[u]) {
+        if (v == p) continue;
+        dfs(v, u);
+    }
+    t[out[u] = tim ++] = -val[u];
+}
+
+int main() { 
     #ifndef ONLINE_JUDGE
-        freopen("debug.txt", "w", stderr); // WINDOWS
+        freopen("inputf.in", "r", stdin); // LINUX
     #endif
     SEND_HELP
-    
+
     int n, q;
     cin >> n >> q;
-    vector<ll> A(n);
-    for (int i = 0; i < n; ++ i) cin >> A[i];
-    struct SEGTREE seg;
-	seg.init(A);
+    for (int i = 0; i < n; ++ i) {
+        cin >> val[i];
+    }
 
-	while(q --) {
-		char cho;
-		cin >> cho;
-		if (cho == 'q') {
-			int l, r;
-			cin >> l >> r;
-			cout << seg.query(0, 0, n - 1, -- l, -- r) << endl;
-		}
-		else {
-			int x, y;
-			cin >> x >> y;
-			seg.a[-- x] = y;
-			seg.update(0, 0, n - 1, x);
-		}
-	}
-    
-    
+    for (int i = 0; i < n - 1; ++ i) {
+        int a, b;
+        cin >> a >> b;
+        -- a, -- b;
+        adj[a].push_back(b);
+        adj[b].push_back(a);
+    }
+
+    dfs(0, -1);
+
+    SEGTREE<ll> seg;
+    seg.init(t);
+
+    while (q --) {
+        int cho;
+        cin >> cho;
+        if (cho == 1) {
+            int u; ll x;
+            cin >> u >> x;
+            -- u;
+            seg.update(in[u], x);
+            seg.update(out[u], -x);
+        } else {
+            int u;
+            cin >> u;
+            -- u;
+            cout << seg.query(0, 0, seg.n - 1, 0, in[u]).x << endl;
+        }
+    }
+
     return 0;
 }
 
