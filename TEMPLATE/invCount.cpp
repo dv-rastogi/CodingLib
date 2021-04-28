@@ -30,81 +30,101 @@ void _print(T t, V... v) { __print(t); if (sizeof...(v)) cerr << ", "; _print(v.
 #else
     #define dbg(x...)
 #endif
-
  
 ll INF = 2e17;
 ll MOD = 1e9 + 7;
 
-ll inv = 0;
-vector<int> x;
 
-void join(int l, int r) {
-    int mid = (l + r) >> 1;
-    int sl = mid - l + 1;
-    int sr = r - mid;
-    vector<int> left(sl), right(sr);
-    for (int i = 0, j = l; i < sl; ++ i, ++ j)
-        left[i] = x[j];
-    for (int i = 0, j = mid + 1; i < sr; ++ i, ++ j)
-        right[i] = x[j];
 
-    vector<int> f;
-    int pl = 0, pr = 0;
-    while (pl < sl && pr < sr) {
-        if (left[pl] > right[pr]) {
-            f.push_back(right[pr ++]);
-        } else {
-            f.push_back(left[pl ++]);
-            inv += pr;
+template <typename T>
+struct INVCOUNT {
+
+    ll inv = 0;
+    vector<T> x;
+
+    void init(vector<T> a) {
+        x = a;
+    }
+
+    void join(int l, int r) {
+        int mid = (l + r) >> 1;
+        int sl = mid - l + 1;
+        int sr = r - mid;
+        vector<T> left(sl), right(sr);
+        for (int i = 0, j = l; i < sl; ++ i, ++ j)
+            left[i] = x[j];
+        for (int i = 0, j = mid + 1; i < sr; ++ i, ++ j)
+            right[i] = x[j];
+
+        vector<T> f;
+        int pl = 0, pr = 0;
+        while (pl < sl && pr < sr) {
+            if (left[pl] > right[pr]) {
+                f.push_back(right[pr ++]);
+            } else {
+                f.push_back(left[pl ++]);
+                inv += pr;
+            }
         }
+
+        while (pl < sl) {
+            f.push_back(left[pl ++]);
+            inv += sr;
+        }
+
+        while (pr < sr) {
+            f.push_back(right[pr ++]);
+        }
+
+        for (int i = 0, j = l; i < (int) f.size(); ++ i, ++ j)
+            x[j] = f[i];
     }
 
-    while (pl < sl) {
-        f.push_back(left[pl ++]);
-        inv += sr;
+    void msort(int l, int r) {
+        if (l >= r)
+            return;
+        int mid = (l + r) >> 1;
+        msort(l, mid);
+        msort(mid + 1, r);
+        join(l, r);
     }
 
-    while (pr < sr) {
-        f.push_back(right[pr ++]);
+    ll run() {
+        msort(0, x.size() - 1);
+        return inv;
     }
+};
 
-    for (int i = 0, j = l; i < (int) f.size(); ++ i, ++ j)
-        x[j] = f[i];
-}
 
-void msort(int l, int r) {
-    if (l >= r)
-        return;
-    int mid = (l + r) >> 1;
-    msort(l, mid);
-    msort(mid + 1, r);
-    join(l, r);
-}
 
-int main() {
+int main() { 
     #ifndef ONLINE_JUDGE
-        // freopen("debug.txt", "w", stderr); // WINDOWS
         freopen("inputf.in", "r", stdin); // LINUX
     #endif
     SEND_HELP
-    
-    int tt;
-    cin >> tt;
-    while (tt --) {
-        int n;
-        cin >> n;
-        
-        x.clear();
-        x.resize(n);
-        for (int i = 0; i < n; ++ i) {
-            cin >> x[i];
-        }
 
-        inv = 0;
-        msort(0, n - 1);
+    int n;
+    cin >> n;
+    vector<int> a(n);   
+    
+    for (int i = 0; i < n; ++ i) {
+        cin >> a[i];
+    }
+
+    INVCOUNT<int> x;
+    x.init(a);
+    ll inv = x.run();
+
+    dbg(a);
+    cout << inv << endl;
+
+    for (int i = 0; i < n - 1; ++ i) {
+        ll small = a[i];
+        ll big = (n - 1 - a[i]);
+        inv += (big - small);
         cout << inv << endl;
     }
-    
+
     return 0;
 }
 
