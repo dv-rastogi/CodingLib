@@ -57,7 +57,7 @@ struct SEGTREE {
     }
 
     void build(int u, int tl, int tr) {
-        if(tl == tr){
+        if (tl == tr) {
             t[u] = a[tl];
             return;
         }
@@ -73,7 +73,7 @@ struct SEGTREE {
     }
 
     void _update(int u, int tl, int tr, int idx) {
-        if(tl == tr){
+        if (tl == tr) {
             t[u] = a[idx];
             return;
         }
@@ -84,7 +84,7 @@ struct SEGTREE {
     }
 
     NODE query(int u, int tl, int tr, int l, int r) {
-        if(tl == l && tr == r)
+        if (tl == l && tr == r)
             return t[u];
         int tm = (tl + tr) >> 1;
         if(r <= tm) return query(2 * u + 1, tl, tm, l, r);
