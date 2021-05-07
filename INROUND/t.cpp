@@ -30,21 +30,34 @@ void _print(T t, V... v) { __print(t); if (sizeof...(v)) cerr << ", "; _print(v.
 #else
     #define dbg(x...)
 #endif
-
-// DON"T GET IMPULSIVEEEEEEE aaaaaaahh
  
 ll INF = 2e17;
 ll MOD = 1e9 + 7;
 
-int main() {
+void solve_tc(int test_case) {
+    
+}
+
+int main() { 
     #ifndef ONLINE_JUDGE
-        freopen("debug.txt", "w", stderr); // WINDOWS
-        // freopen("inputf.in", "r", stdin); // LINUX
+        freopen("inputf.in", "r", stdin); // LINUX
     #endif
     SEND_HELP
+
+    auto start_exec = chrono::high_resolution_clock::now();
+    int tt = 1;
+    cin >> tt; // TEST CASE INPUT
     
-    
-    
+    for (int tc = 1; tc <= tt; ++ tc) {
+        solve_tc(tc);
+    }
+
+    auto stop_exec = chrono::high_resolution_clock::now();
+    auto duration_exec = chrono::duration_cast<chrono::milliseconds>(stop_exec - start_exec);
+    #ifndef ONLINE_JUDGE
+        cout << "\n\nDURATION EXECUTION: " << duration_exec.count() << "ms\n";
+    #endif
+
     return 0;
 }
 

@@ -1,5 +1,3 @@
-<snippet>
-	<content><![CDATA[
 # include "bits/stdc++.h"
  
 using namespace std;
@@ -37,7 +35,7 @@ ll INF = 2e17;
 ll MOD = 1e9 + 7;
 
 void solve_tc(int test_case) {
-    $1
+    
 }
 
 int main() { 
@@ -66,10 +64,3 @@ int main() {
 /*
 https://github.com/watch24hrs-iiitd/CodingLib
 */
-]]></content>
-	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
-	<tabTrigger>TEMP</tabTrigger>
-	<!-- Optional: Set a scope to limit where the snippet will trigger -->
-	<scope>source.c++</scope>
-	<description> cpp template </description>
-</snippet>
