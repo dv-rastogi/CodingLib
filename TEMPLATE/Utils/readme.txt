@@ -1,0 +1,3 @@
+- Remeber to use the same flags to precompile `bits` as in `Makefile`
+- https://codeforces.com/blog/entry/53909
+- Define preprocessor directive `LOCAL_PROJECT` for debugging and execution time

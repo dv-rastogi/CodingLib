@@ -1,2 +1,0 @@
-REMEMBER TO USE THE SAME FLAGS TO COMPILE AS IN MAKEFILE
-https://codeforces.com/blog/entry/53909
