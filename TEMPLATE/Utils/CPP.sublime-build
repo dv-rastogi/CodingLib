@@ -1,6 +1,6 @@
 // FOR WINDOWS
 {
-"cmd": ["g++.exe","-Wall","-std=c++17", "${file}", "-o", "${file_base_name}.exe", "&&" , "${file_base_name}.exe<inputf.in>outputf.in"],
+"cmd": ["g++.exe","-D","LOCAL_PROJECT","-Wall","-std=c++17", "${file}", "-o", "${file_base_name}.exe", "&&" , "${file_base_name}.exe<inputf.in>outputf.in"],
 "shell":true,
 "working_dir":"$file_path",
 "selector":"source.cpp"
