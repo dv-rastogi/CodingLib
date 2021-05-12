@@ -51,14 +51,15 @@ struct DSU {
             return v;
         return par[v] = find(par[v]);
     }
-    int unite(int a, int b) {
+    bool unite(int a, int b) {
         a = find(a);
         b = find(b);
-        if (a == b) return -1;
+        if (a == b) return false;
         if (sz[a] < sz[b])
             swap(a, b);
         par[b] = a;
         sz[a] += sz[b];
+        return true;
     }
 };
 
