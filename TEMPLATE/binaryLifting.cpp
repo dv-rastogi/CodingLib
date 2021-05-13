@@ -159,10 +159,10 @@ vector<int> ans;
 
 void dfs(int u, int p = -1) {
     ans[u] = weight[u];
-    for (auto v: tree.adj[u]) {
-        if (v.f != p) {
-            dfs(v.f, u);
-            ans[u] += ans[v.f];
+    for (auto e: tree.adj[u]) {
+        if (e.nxt != p) {
+            dfs(e.nxt, u);
+            ans[u] += ans[e.nxt];
         }
     }
 }
