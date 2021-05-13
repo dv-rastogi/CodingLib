@@ -36,7 +36,18 @@ ll MOD = 1e9 + 7;
 
 
 struct BLIFT_TREE {
-    vector<vector<pair<int, ll>>> adj; // Adjacency list #INPUT 0-indexed
+
+    struct EDGE {
+        int src, nxt;
+        ll w;
+        EDGE(int src, int nxt, ll w) : src(src), nxt(nxt), w(w) {}
+
+        bool operator< (const EDGE &o) const {
+            return tie(w, nxt, src) < tie(o.w, o.nxt, o.src);
+        }
+    };    
+
+    vector<vector<EDGE>> adj; // Adjacency list #INPUT 0-indexed
     int n; // No. of nodes #INPUT
     int root; // root of tree #INPUT
 
@@ -53,19 +64,19 @@ struct BLIFT_TREE {
         adj.resize(n);
     }
 
-    void addEdge(int a, int b, bool bi = true, ll w = 1) {
-        adj[a].push_back({b, w});
-        if (bi) adj[b].push_back({a, w});
+    void addEdge(int a, int b, ll w = 1, bool bi = true) {
+        adj[a].emplace_back(a, b, w);
+        if (bi) adj[b].emplace_back(b, a, w);
     }
 
     void dfsDep(int u, int p) {
         inTime[u] = dfsTime ++;
         up[u][0] = p;
-        for (auto v : adj[u]) {
-            if (v.f != p) {
-                dep[v.f] = dep[u] + v.s;
-                d[v.f] = d[u] + 1;
-                dfsDep(v.f, u);
+        for (EDGE e : adj[u]) {
+            if (e.nxt != p) {
+                dep[e.nxt] = dep[u] + e.w;
+                d[e.nxt] = d[u] + 1;
+                dfsDep(e.nxt, u);
             }
         }
         outTime[u] = dfsTime ++;
