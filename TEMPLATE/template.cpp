@@ -31,8 +31,8 @@ void _print(T t, V... v) { __print(t); if (sizeof...(v)) cerr << ", "; _print(v.
     #define dbg(x...)
 #endif
  
-ll INF = 2e17;
-ll MOD = 1e9 + 7;
+const ll INF = 2e17;
+const ll MOD = 1e9 + 7;
 
 void solve_tc(int test_case) {
     
