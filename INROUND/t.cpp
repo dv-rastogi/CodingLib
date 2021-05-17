@@ -1,5 +1,5 @@
-# include "bits/stdc++.h"
- 
+#include "bits/stdc++.h"
+
 using namespace std;
  
 #define endl "\n"
@@ -35,7 +35,9 @@ const ll INF = 2e17;
 const ll MOD = 1e9 + 7;
 
 void solve_tc(int test_case) {
-    
+    tuple<int, int, int> x = {3, 4, 5};
+    auto [a, b, c] = x;
+    cout << a << b << c;
 }
 
 int main() { 
