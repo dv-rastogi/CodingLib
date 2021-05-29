@@ -41,8 +41,12 @@ struct SEGTREE {
         T x;
     };  
 
-    NODE merge(const NODE &A,const NODE &B) { // CHANGE
+    NODE merge(const NODE &A, const NODE &B) { // CHANGE
         return NODE{A.x + B.x};
+    }
+
+    NODE err() { // CHANGE
+        return NODE{0};
     }
 
     vector<NODE> t, a;
@@ -83,13 +87,19 @@ struct SEGTREE {
         t[u] = merge(t[2 * u + 1], t[2 * u + 2]);
     }
 
-    NODE query(int u, int tl, int tr, int l, int r) {
+    NODE query(int l, int r) {
+        if (l > r)
+            return err();
+        return _query(0, 0, n - 1, l , r);
+    }
+
+    NODE _query(int u, int tl, int tr, int l, int r) {
         if (tl == l && tr == r)
             return t[u];
         int tm = (tl + tr) >> 1;
-        if(r <= tm) return query(2 * u + 1, tl, tm, l, r);
-        else if(l > tm) return query(2 * u + 2, tm + 1, tr, l, r);
-        else return merge(query(2 * u + 1, tl, tm, l, tm), query(2 *u + 2, tm + 1, tr, tm + 1, r));
+        if(r <= tm) return _query(2 * u + 1, tl, tm, l, r);
+        else if(l > tm) return _query(2 * u + 2, tm + 1, tr, l, r);
+        else return merge(_query(2 * u + 1, tl, tm, l, tm), _query(2 * u + 2, tm + 1, tr, tm + 1, r));
     }
 };
 
