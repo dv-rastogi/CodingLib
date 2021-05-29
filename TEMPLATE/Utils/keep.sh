@@ -17,6 +17,10 @@ echo "Journal logs"
 journalctl --disk-usage
 journalctl --vacuum-size=100M
 
+# enabling keyboard led, without activating scroll lock
+# scroll lock casues laggy system
+sudo xset led 3
+
 # Todo for space
 # 1. Clear journal
 # 2. Vscode Reset intellisense database
