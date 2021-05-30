@@ -31,87 +31,123 @@ void _print(T t, V... v) { __print(t); if (sizeof...(v)) cerr << ", "; _print(v.
     #define dbg(x...)
 #endif
 
-// DON"T GET IMPULSIVEEEEEEE aaaaaaahh
- 
 ll INF = 2e17;
 ll MOD = 1e9 + 7;
 
-struct SEGTREE_LAZY { // sum of range
-	vector<ll> t, lazy;
-	vector<ll> a;
-	int n;
-	void init(vector<ll> A) { // init the segTree
-		n = A.size();
-		t.resize(4 * n);
-		lazy.resize(4 * n);
-		for (auto it : A)
-			a.push_back(it);
+template<typename T>
+struct SEGTREE_LAZY { 
+    vector<T> t;
+    vector<T> lazy; // contains the info, needed to be passed down
+    vector<T> a;
+    int n;
+    
+    void init(vector<T> A) {
+        n = A.size();
+        t.resize(4 * n);
+        lazy.resize(4 * n);
+        a = vector<T>(A);
+        build(0, 0, n - 1);
+    }
 
-		this->build(0, 0, n - 1);
-	}
-	void build(int u, int tl, int tr) { // build
-		if (tl == tr) {
-			t[u] = a[tl];
-		}
-		else {
-			int tm = (tl + tr) >> 1;
-			build(2 * u + 1, tl, tm);
-			build(2 * u + 2, tm + 1, tr);
-			t[u] = t[2 * u + 1] + t[2 * u + 2];
-		}
-	}
-	void update(int u, int tl, int tr, int l, int r, ll val) { // update
-		if (l == tl && tr == r) {
-			t[u] += val * (r - l + 1);
-			{ // lazy
-				lazy[u] += val;
-			}
-		}
-		else {
-			int tm = (tl + tr) >> 1;
-			{ // perform lazy push
-				lazy[2 * u + 1] += lazy[u];
-				t[2 * u + 1] += (lazy[u] * (tm - tl + 1));
-				lazy[2 * u + 2] += lazy[u];
-				t[2 * u + 2] += (lazy[u] * (tr - tm));
-				lazy[u] = 0;
-			}
-			if (r <= tm)
-				update(2 * u + 1, tl, tm, l, r, val);
-			else if (l > tm)
-				update(2 * u + 2, tm + 1, tr, l, r, val);
-			else {
-				update(2 * u + 1, tl, tm, l, tm, val);
-				update(2 * u + 2, tm + 1, tr, tm + 1, r, val);
-			}
-			t[u] = t[2 * u + 1] + t[2 * u + 2];
-		}
-	}
-	ll query(int u, int tl, int tr, int l, int r) { // update
-		if (l == tl && tr == r) {
-			return t[u];
-		}
-		else {
-			int tm = (tl + tr) >> 1;
-			{ // perform lazy push
-				lazy[2 * u + 1] += lazy[u];
-				t[2 * u + 1] += (lazy[u] * (tm - tl + 1));
-				lazy[2 * u + 2] += lazy[u];
-				t[2 * u + 2] += (lazy[u] * (tr - tm));
-				lazy[u] = 0;
-			}
-			if (r <= tm)
-				return query(2 * u + 1, tl, tm, l, r);
-			else if (l > tm)
-				return query(2 * u + 2, tm + 1, tr, l, r);
-			else {
-				ll lsum = query(2 * u + 1, tl, tm, l, tm);
-				ll rsum = query(2 * u + 2, tm + 1, tr, tm + 1, r);
-				return lsum + rsum;
-			} 
+    // called when 2 child nodes merge to form parent node
+    T merge(T a, T b) { 
+        return a + b;
+    }
 
-		}
-	}
+    // called when change is need to be applied on a node
+    void applyAggregate(int u, int tl, int tr, T change) {
+        t[u] += change * (tr - tl + 1);
+    }
+
+    // called when a change is initiated at this node
+    void initChange(int u, int tl, int tr, T change) {
+        lazy[u] += change;
+    }
+
+    // called when parent node changes are to merged to child node
+    void compose(int u, int tl, int tr, int p) {
+        lazy[u] += lazy[p];
+    }
+
+    // called after changes are propogated 
+    void reset(int u) {
+        lazy[u] = 0;
+    }
+
+    // called when changes need to be pushed down while traversing
+    void push(int u, int tl, int tr) {
+        int tm = (tl + tr) >> 1;
+        
+        applyAggregate(2 * u + 1, tl, tm, lazy[u]);
+        compose(2 * u + 1, tl, tm, u);
+
+        applyAggregate(2 * u + 2, tm + 1, tr, lazy[u]);
+        compose(2 * u + 2, tm + 1, tr, u);
+
+        reset(u);
+    }
+
+    void build(int u, int tl, int tr) { // build
+        if (tl == tr) {
+            t[u] = a[tl];
+        }
+        else {
+            int tm = (tl + tr) >> 1;
+            build(2 * u + 1, tl, tm);
+            build(2 * u + 2, tm + 1, tr);
+            t[u] = merge(t[2 * u + 1] , t[2 * u + 2]);
+        }
+    }
+
+    void update(int l, int r, T val) {
+        _update(0, 0, n - 1, l, r, val);
+    }
+
+    void _update(int u, int tl, int tr, int l, int r, T val) { 
+        if (l == tl && tr == r) {
+            applyAggregate(u, tl, tr, val);
+            initChange(u, tl, tr, val);
+        }
+        else {
+            push(u, tl, tr);
+
+            int tm = (tl + tr) >> 1;
+            if (r <= tm)
+                _update(2 * u + 1, tl, tm, l, r, val);
+            else if (l > tm)
+                _update(2 * u + 2, tm + 1, tr, l, r, val);
+            else {
+                _update(2 * u + 1, tl, tm, l, tm, val);
+                _update(2 * u + 2, tm + 1, tr, tm + 1, r, val);
+            }
+            t[u] = merge(t[2 * u + 1], t[2 * u + 2]);
+        }
+    }
+
+    T query(int l, int r) {
+        return _query(0, 0, n - 1, l, r);
+    }
+
+    T _query(int u, int tl, int tr, int l, int r) { 
+        if (l == tl && tr == r) {
+            return t[u];
+        }
+        else {
+            push(u, tl, tr);
+
+            int tm = (tl + tr) >> 1;
+            if (r <= tm)
+                return _query(2 * u + 1, tl, tm, l, r);
+            else if (l > tm)
+                return _query(2 * u + 2, tm + 1, tr, l, r);
+            else {
+                T L = _query(2 * u + 1, tl, tm, l, tm);
+                T R = _query(2 * u + 2, tm + 1, tr, tm + 1, r);
+                return merge(L, R);
+            } 
+
+        }
+    }
 };
 
 int main() {
