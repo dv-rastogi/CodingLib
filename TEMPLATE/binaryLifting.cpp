@@ -72,7 +72,7 @@ struct BLIFT_TREE {
     void dfsDep(int u, int p) {
         inTime[u] = dfsTime ++;
         up[u][0] = p;
-        for (EDGE e : adj[u]) {
+        for (EDGE &e : adj[u]) {
             if (e.nxt != p) {
                 dep[e.nxt] = dep[u] + e.w;
                 d[e.nxt] = d[u] + 1;
