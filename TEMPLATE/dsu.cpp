@@ -38,6 +38,8 @@ struct DSU {
     vector<int> par, sz;
     int n; 
     void init(int lim) {
+        par.clear();
+        sz.clear();
         n = lim;
         par.resize(n);
         sz.resize(n);
