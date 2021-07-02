@@ -58,7 +58,17 @@ struct BLIFT_TREE {
     int dfsTime;
     vector<int> inTime, outTime;
 
+    void reset() {
+        adj.clear();
+        dep.clear();
+        d.clear();
+        up.clear();
+        inTime.clear();
+        outTime.clear();   
+    };
+
     void init(int N, int ROOT = 0) {
+        reset();
         n = N;
         root = ROOT;
         adj.resize(n);
