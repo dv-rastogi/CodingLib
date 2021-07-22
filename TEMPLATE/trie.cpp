@@ -19,7 +19,7 @@ struct TRIE {
         clear();
     }
     
-    void addString(const string &s) {
+    void add(const string &s) {
         int u = 0;
         for (char ch: s) {
             if (nodes[u].next.find(ch) == nodes[u].next.end()) {
