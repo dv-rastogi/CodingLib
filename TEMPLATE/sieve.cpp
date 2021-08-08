@@ -34,17 +34,32 @@ void _print(T t, V... v) { __print(t); if (sizeof...(v)) cerr << ", "; _print(v.
 ll INF = 2e17;
 ll MOD = 1e9 + 7;
 
-vector<int> sieve(int n) {
-	vector<int> prime(n + 1, 1); // stores the smallest factor, bounce down while factoring
-	for (int p = 2; p * p <= n; ++ p) {
-		if (prime[p] == 1) {
-			for (int i = p * p; i <= n; i += p) {
-				if (prime[i] != 1) continue;
-				prime[i] = p;
-			}
-		}
-	}
-	return prime;
+vector<int> prime;
+void sieve(int n) { // smallest prime factor for each number
+    prime.resize(n + 1);
+    prime[1] = 1;
+    for (int i = 2; i <= n; ++ i) {
+        prime[i] = i;
+    }
+    for (int i = 4; i <= n; i += 2) {
+        prime[i] = 2;
+    }
+    for (int i = 3; i * i <= n; i += 2) {
+        if (prime[i] == i) {
+            for (int j = i * i; j <= n; j += i) {
+                if (prime[j] == j) {
+                    prime[j] = i;
+                }
+            }
+        }
+    }
+}
+
+void primeFactors(int n, map<int, int> &f) {
+    while (n != 1) {
+        f[prime[n]] ++;
+        n = n / prime[n];
+    }
 }
 
 int main() { 
