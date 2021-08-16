@@ -48,6 +48,9 @@ struct DSU {
             sz[i] = 1;
         }
     }
+    bool same(int u, int v) {
+        return find(u) == find(v);
+    }
     int find(int v) {
         if (v == par[v])
             return v;
