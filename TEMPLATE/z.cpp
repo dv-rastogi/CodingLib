@@ -37,7 +37,7 @@ For string matching, T & S
 Create T$S
 Find all i s.t. z[i] = T.size()
 */
-vector<int> getZ(string &s) {
+vector<int> getZ(const string &s) {
     int n = s.size();
     vector<int> z(n);
     z[0] = n;
