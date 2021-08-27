@@ -36,6 +36,8 @@ ll MOD = 1e9 + 7;
 
 
 struct BLIFT_TREE {
+ 
+    typedef long long int ll;
 
     struct EDGE {
         int src, nxt;
