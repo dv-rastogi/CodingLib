@@ -37,6 +37,8 @@ const ll MOD = 1e9 + 7;
 const int N = 2005;
 
 struct DJIKSTRA {
+ 
+    typedef long long int ll;
     
     struct EDGE {
         int src, nxt;
