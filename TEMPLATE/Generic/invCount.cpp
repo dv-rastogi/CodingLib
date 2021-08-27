@@ -38,7 +38,9 @@ ll MOD = 1e9 + 7;
 
 template <typename T>
 struct INVCOUNT {
-
+ 
+    typedef long long int ll;
+ 
     ll inv = 0;
     vector<T> x;
 
