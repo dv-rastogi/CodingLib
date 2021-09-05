@@ -7,19 +7,21 @@ snap list --all | awk '/disabled/{print $1, $3}' |
         snap remove "$snapname" --revision="$revision"
     done
 
-echo "apt autoremove"
-apt autoremove
+echo "apt autoremove";
+apt autoremove;
 
-echo "Cleaning apt cache"
-apt-get clean
+echo "Cleaning apt cache";
+apt-get clean;
 
-echo "Journal logs"
-journalctl --disk-usage
-journalctl --vacuum-size=100M
+echo "Journal logs";
+journalctl --disk-usage;
+journalctl --vacuum-size=100M;
 
-# enabling keyboard led, without activating scroll lock
-# scroll lock casues laggy system
-sudo xset led 3
+echo "Purging pip cache";
+pip cache purge;
+
+# echo "enabling colors";
+# sudo xset led 3;
 
 # Todo for space
 # 1. Clear journal
